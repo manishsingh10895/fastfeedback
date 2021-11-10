@@ -1,5 +1,7 @@
 import '../styles/globals.css'
 import React from 'react';
+import { AuthProvider, useProvideAuth } from '../lib/auth';
+import { ChakraProvider } from '@chakra-ui/react';
 
 type Props = {
   Component: any,
@@ -8,7 +10,13 @@ type Props = {
 
 function MyApp(props: Props) {
   const { Component, pageProps } = props;
-  return (<Component { ...pageProps } />)
+  return (
+    <ChakraProvider>
+      {/* <AuthProvider> */}
+        <Component {...pageProps} />
+      {/* </AuthProvider> */}
+    </ChakraProvider>
+  )
 }
 
 export default MyApp
