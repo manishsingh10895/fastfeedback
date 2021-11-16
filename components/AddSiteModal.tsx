@@ -56,7 +56,7 @@ export default function AddSiteModal(props: Props) {
 
             siteData['id'] = created.id;
 
-            mutate('/api/sites', { sites: [siteData, ...staleData.sites] }, false);
+            mutate(['/api/sites', user.token], { sites: [siteData, ...staleData.sites] }, false);
 
             reset();
         } catch (error) {

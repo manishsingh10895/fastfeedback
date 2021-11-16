@@ -20,20 +20,21 @@ export async function getStaticProps(context) {
     return {
         revalidate: 1,
         props: {
-            initialFeedback: feedback,
+            initialFeedback: feedback ? feedback : [],
         }, // will be passed to the page component as props
     }
 }
 
 export async function getStaticPaths() {
     const { sites, error } = await getAllSites();
-    const paths = sites.map(s => {
+
+    const paths = sites ? sites.map(s => {
         return {
             params: {
                 siteId: s.id.toString()
             },
         }
-    })
+    }) : {}
     return {
         paths: paths,
         fallback: true,  // See the "fallback" section below
@@ -106,11 +107,11 @@ export default function SiteFeedback({ initialFeedback }) {
                 </FormControl>
             </Box>
             {
-                feedbacks.map(f => {
+                feedbacks ? feedbacks.map(f => {
                     return (
                         <Feedback {...f} key={f.id} />
                     )
-                })
+                }) : null
             }
         </Box>
     )

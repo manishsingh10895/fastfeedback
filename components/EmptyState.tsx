@@ -1,11 +1,6 @@
-import { Avatar } from '@chakra-ui/avatar'
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/breadcrumb'
-import Icon from '@chakra-ui/icon'
-import { Button, Text } from '@chakra-ui/react'
-import { Box, Flex, Heading, Link, Stack } from '@chakra-ui/layout'
+import { Flex, Heading } from '@chakra-ui/layout'
+import { Text } from '@chakra-ui/react'
 import React from 'react'
-import DashboardShell from './DashboardShell';
-import { useAuth } from '@/lib/auth'
 import AddSiteModal from './AddSiteModal'
 
 type Props = {
@@ -20,11 +15,11 @@ export default function EmptyState(props: Props) {
             flexDirection='column'
             width="100%" borderRadius="8px" p={8} backgroundColor="gray.800">
             <Heading size="md">
-                You Haven't added any sites
+                {"You Haven't added any sites yet"}
             </Heading>
 
             <Text padding={"1rem 0"}>
-                Welcom, Let's get started by adding your first site.
+                {"Welcome, Let's get started by adding your first site."}
             </Text>
 
             <AddSiteModal>

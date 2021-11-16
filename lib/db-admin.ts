@@ -17,6 +17,7 @@ export async function getAllSites(): Promise<{ sites, error }> {
                 }
             );
     } catch (error) {
+        console.error(error);
         return { error, sites: null }
     }
 }
