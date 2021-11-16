@@ -5,6 +5,24 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/lib/*": [
+        "lib/*"
+      ],
+      "@/styles/*": [
+        "styles/*"
+      ],
+      "@/infra/*": [
+        "infra/*"
+      ],
+      "@/utils/*": [
+        "utils/*"
+      ]
+    },
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -19,7 +37,7 @@
       "esnext"
     ],
     "types": [
-        "node"
+      "node"
     ],
     "allowJs": true,
     "skipLibCheck": true,
