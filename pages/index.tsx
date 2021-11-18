@@ -1,15 +1,31 @@
-import { Button, Heading, Text, Code, Flex } from '@chakra-ui/react';
+import { Button, Heading, Text, Code, Flex, Box, Icon, IconButton } from '@chakra-ui/react';
 import Head from 'next/head'
 import Link from 'next/link'
 import Cookie from 'js-cookie';
 import React from 'react';
 import { useAuth } from '@/lib/auth';
 import styles from '@/styles/Home.module.css';
-import { FaGithub, FaGoogle } from 'react-icons/fa';
+import { FaArrowRight, FaGithub, FaGoogle } from 'react-icons/fa';
 import ActionButton from '../components/ActionButton';
+import { getAllFeedBack } from '../lib/db-admin';
+import Feedback from '../components/Feedback';
 
-export default function Home() {
+const SITE_ID = "6qjdlW5cMPepYqUez1zQ";
+
+export async function getStaticProps() {
+  const { feedback, error } = await getAllFeedBack(SITE_ID);
+  return {
+    revalidate: 1,
+    props: {
+      feedbacks: feedback ? feedback : [],
+    }, // will be passed to the page component as props
+  }
+}
+
+
+export default function Home({ feedbacks }) {
   const auth = useAuth();
+
   return (
     <div className={"container"}>
       <Head>
@@ -41,24 +57,50 @@ export default function Home() {
               </Flex>
             </>
             :
-            <Flex margin="1rem" flexWrap="wrap" justifyContent="center ">
-              <ActionButton mr={5}
-                leftIcon={<FaGithub />}
+            <>
+              <Flex margin="1rem" flexWrap="wrap" justifyContent="center ">
+                <ActionButton mr={5}
+                  leftIcon={<FaGithub />}
 
-                onClick={() => {
-                  auth.signinWithGithub();
-                }}>
-                Sign In With Github
-              </ActionButton>
-              <ActionButton
-                backgroundColor="white"
-                color="gray.500"
-                leftIcon={<FaGoogle />} onClick={() => {
-                  auth.signinWithGoogle();
-                }}>
-                Sign In With Google
-              </ActionButton>
-            </Flex>
+                  onClick={() => {
+                    auth.signinWithGithub();
+                  }}>
+                  Sign In With Github
+                </ActionButton>
+                <ActionButton
+                  backgroundColor="white"
+                  color="gray.500"
+                  leftIcon={<FaGoogle />} onClick={() => {
+                    auth.signinWithGoogle();
+                  }}>
+                  Sign In With Google
+                </ActionButton>
+              </Flex>
+
+              <Box padding="0 1rem" w={"100%"} maxWidth="700px" marginLeft="auto" marginRight="auto" mt={10}>
+                <Flex justifyContent="space-between">
+                  {/* <Link > */}
+                  <Button background="transparent" aria-label="leave a comment" rightIcon={<FaArrowRight />}>
+                    Leave a comment
+                  </Button>
+                  {/* </Link> */}
+
+                  <Text fontSize="x-small" color="gray.400">
+                    Powered by Fast Feedback
+                  </Text>
+                </Flex>
+
+                <Box padding="1rem 2rem">
+                  {
+                    feedbacks ? feedbacks.map(f => {
+                      return (
+                        <Feedback {...f} key={f.id} />
+                      )
+                    }) : null
+                  }
+                </Box>
+              </Box>
+            </>
         }
       </main>
     </div >

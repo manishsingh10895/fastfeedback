@@ -1,6 +1,4 @@
 export default async (url, token) => {
-    console.log('[FETCHER]');
-    console.log(url, token);
     //@ts-ignore
     const res = await fetch(url, {
         method: "GET",

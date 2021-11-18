@@ -1578,6 +1578,11 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
 
+"@stripe/stripe-js@^1.21.1":
+  version "1.21.1"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.21.1.tgz#e56cd01f889dc06af4a68ebf61d2492a87e80da1"
+  integrity sha512-/HhRol0Bia/6L7JstXUOpg3m0U3nBW8c2tvaBE6QdonN+OMusYT9AIqCMR/PyzoF3ROifFJ2kbWT7xQjbKN3tw==
+
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"

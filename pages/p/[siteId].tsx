@@ -37,7 +37,7 @@ export async function getStaticPaths() {
     }) : {}
     return {
         paths: paths,
-        fallback: true,  // See the "fallback" section below
+        fallback: true,
     };
 }
 
@@ -86,7 +86,7 @@ export default function SiteFeedback({ initialFeedback }) {
             console.log(newFeedback);
 
 
-            setFeedbacks([newFeedback, ...initialFeedback]);
+            setFeedbacks([newFeedback, ...feedbacks]);
             console.log("Done");
 
             inputEl.current.value = "";
@@ -103,7 +103,7 @@ export default function SiteFeedback({ initialFeedback }) {
                 <FormControl my={10} id="email">
                     <FormLabel htmlFor="comment">Comment</FormLabel>
                     <Input ref={inputEl} type="text" name="comment" id="comment" />
-                    <Button type="submit" fontWeight="medium" mt="10px">Add Comment</Button>
+                    <Button disabled={router.isFallback} type="submit" fontWeight="medium" mt="10px">Add Comment</Button>
                 </FormControl>
             </Box>
             {
