@@ -12,7 +12,6 @@ export default function ActionButton(props: ChakraProps & ButtonProps & { childr
             backgroundColor="gray.900"
             color="white"
             fontWeight="medium"
-            mt={4}
             size="lg"
             _hover={{ bg: 'gray.700' }}
             _active={{ bg: "gray.800", transform: "scale(0.95)" }}

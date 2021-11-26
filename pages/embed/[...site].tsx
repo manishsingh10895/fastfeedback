@@ -1,26 +1,23 @@
-import { Button } from '@chakra-ui/button';
-import { FormControl, FormLabel, FormHelperText } from '@chakra-ui/form-control';
-import { Input } from '@chakra-ui/input';
-import { Box } from '@chakra-ui/layout';
-import { toast, useToast } from '@chakra-ui/toast';
-import { useRouter } from 'next/dist/client/router';
-import React, { useRef, useState } from 'react'
-import Feedback from '@/components/Feedback';
+import Feedback from '@/components/Feedback'
+import FeedbackLink from '@/components/FeedbackLink';
 import { useAuth } from '@/lib/auth';
 import { createFeedback } from '@/lib/db';
-import { getAllFeedBack, getAllSites } from '@/lib/db-admin';
-
-type Props = {
-    siteId: string
-}
+import { getAllFeedBack, getAllSites, getSite } from '@/lib/db-admin';
+import { Box, Button, FormControl, FormLabel, Input, useToast } from '@chakra-ui/react'
+import { useRouter } from 'next/dist/client/router';
+import React, { useRef, useState } from 'react'
 
 export async function getStaticProps(context) {
-    const siteId = context.params.siteId;
-    const { feedback, error } = await getAllFeedBack(siteId);
+    const [siteId, route] = context.params.site;
+
+    const { feedbacks, error } = await getAllFeedBack(siteId, route);
+    
+    const site = await getSite(siteId);
     return {
         revalidate: 1,
         props: {
-            initialFeedback: feedback ? feedback : [],
+            initialFeedback: feedbacks ? feedbacks : [],
+            ...site
         }, // will be passed to the page component as props
     }
 }
@@ -31,7 +28,7 @@ export async function getStaticPaths() {
     const paths = sites ? sites.map(s => {
         return {
             params: {
-                siteId: s.id.toString()
+                site: [s.id.toString()]
             },
         }
     }) : {}
@@ -41,8 +38,7 @@ export async function getStaticPaths() {
     };
 }
 
-export default function SiteFeedback({ initialFeedback }) {
-
+export default function Embed({ initialFeedback, site }) {
     const auth = useAuth();
 
     const router = useRouter();
@@ -81,13 +77,7 @@ export default function SiteFeedback({ initialFeedback }) {
             let created = await createFeedback(newFeedback);
             newFeedback['id'] = created.id;
 
-            console.log('[NEW FEEDBACK CREATED]');
-            console.log(created);
-            console.log(newFeedback);
-
-
             setFeedbacks([newFeedback, ...feedbacks]);
-            console.log("Done");
 
             inputEl.current.value = "";
         } catch (error) {
@@ -98,20 +88,18 @@ export default function SiteFeedback({ initialFeedback }) {
     }
 
     return (
-        <Box flexDirection="column" display="flex" width="full" maxWidth="700px" margin="0 auto">
-            <Box as="form" onSubmit={onSubmit}>
-                <FormControl my={10} id="email">
-                    <FormLabel htmlFor="comment">Comment</FormLabel>
-                    <Input ref={inputEl} type="text" name="comment" id="comment" />
-                    <Button disabled={router.isFallback} type="submit" fontWeight="medium" mt="10px">Add Comment</Button>
-                </FormControl>
-            </Box>
+        <Box flexDirection="column" display="flex"
+            width="full"
+        >
+            <FeedbackLink paths={router?.query?.site as string[] || []} />
             {
-                feedbacks ? feedbacks.map(f => {
+                feedbacks && feedbacks.length ? feedbacks.map(f => {
                     return (
-                        <Feedback {...f} key={f.id} />
+                        <Feedback settings={site?.settings} {...f} key={f.id} />
                     )
-                }) : null
+                }) : <Box>
+                    There are no comments for this site
+                </Box>
             }
         </Box>
     )

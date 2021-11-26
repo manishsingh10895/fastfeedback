@@ -3,9 +3,6 @@ import { auth, firestore as db } from '@/lib/firebase-admin';
 import { getAllSites, getUserSites } from '../../lib/db-admin';
 
 export default async function handler(req, res) {
-  console.log('[Site Headers]');
-  console.log(req.headers['token']);
-
   try {
     const token = req.headers['token'];
 

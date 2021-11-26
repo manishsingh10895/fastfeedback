@@ -33,7 +33,6 @@ export default function AddSiteModal(props: Props) {
 
     const onSubmit = async (data) => {
         try {
-            console.log(data);
             setResult(JSON.stringify(data));
             let siteData = {
                 ...data,
@@ -64,10 +63,6 @@ export default function AddSiteModal(props: Props) {
         }
     }
 
-    console.log(result)
-    console.log(errors);
-    console.log("Valid", isValid);
-    console.log("Touched", touchedFields);
     return (
         <>
             <Button onClick={onOpen}

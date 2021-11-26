@@ -29,9 +29,7 @@ const authContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }) {
     const auth = useProvideAuth();
-    console.log(auth);
     firebase.auth().onAuthStateChanged(async (user) => {
-        console.log(user);
     });
     return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
@@ -43,23 +41,23 @@ export const useAuth = () => {
 export const useProvideAuth: () => AuthContextType = () => {
     const [user, setUser] = useState<FormattedUser | null>(null);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const formatUser = async (user: firebase.User): Promise<FormattedUser> => {
-        console.log('[Firebase User]');
-        console.log(user);
+        const decodedToken = await firebase.auth().currentUser.getIdTokenResult();
+
         return {
             displayName: user.displayName,
             email: user.email,
             photoURL: user.photoURL,
             uid: user.uid,
+            stripeRole: decodedToken.claims.stripeRole,
             token: await user.getIdToken(),
             provider: user.providerData[0].providerId
         };
     };
 
     useEffect(() => {
-        console.log('useEffect');
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
                 formatUser(user)
@@ -68,9 +66,11 @@ export const useProvideAuth: () => AuthContextType = () => {
                         Cookies.set('fast-feedback-auth', 'true', {
                             expires: 60 * 1000 * 100
                         });
+                        setLoading(false);
                     });
             } else {
                 setUser(null);
+                setLoading(false);
                 Cookies.remove('fast-feedback-auth');
             }
         });
@@ -84,12 +84,18 @@ export const useProvideAuth: () => AuthContextType = () => {
                     const { token, ...userWithoutToken } = user;
                     createUser(user.uid, userWithoutToken);
                     setUser(user);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    setLoading(false);
                 })
         } else {
             setUser(null);
+            setLoading(false);
             Cookies.remove('fast-feedback-auth');
             return null;
         }
+
     };
 
     const signinWithGithub = () => {
@@ -99,6 +105,9 @@ export const useProvideAuth: () => AuthContextType = () => {
             .signInWithPopup(new firebase.auth.GithubAuthProvider())
             .then(result => {
                 handleUser(result.user);
+            })
+            .catch(error => {
+                console.error(error);
                 setLoading(false);
             });
     }
@@ -110,6 +119,7 @@ export const useProvideAuth: () => AuthContextType = () => {
             .signInWithPopup(new firebase.auth.GoogleAuthProvider())
             .then(result => {
                 handleUser(result.user);
+            }).catch(() => {
                 setLoading(false);
             });
     }
@@ -123,6 +133,8 @@ export const useProvideAuth: () => AuthContextType = () => {
                 setLoading(false);
                 Cookies.remove('fast-feedback-auth');
                 setUser(null);
+            }).catch(() => {
+                setLoading(false);
             });
     }
 

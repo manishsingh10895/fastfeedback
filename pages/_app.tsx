@@ -4,6 +4,8 @@ import { AuthProvider, useProvideAuth } from '@/lib/auth';
 import { ChakraProvider, useColorMode } from '@chakra-ui/react';
 import { fastTheme } from '@/styles/theme';
 import { css, Global } from '@emotion/react';
+import { DefaultSeo } from 'next-seo';
+import SEO from 'next-seo.config';
 
 type Props = {
   Component: any,
@@ -43,6 +45,7 @@ function MyApp(props: Props) {
     <ChakraProvider resetCSS theme={fastTheme}>
       <AuthProvider>
         <GlobalStyle>
+          <DefaultSeo {...SEO} />
           <Component {...pageProps} />
         </GlobalStyle>
       </AuthProvider>

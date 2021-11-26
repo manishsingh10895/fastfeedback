@@ -1,7 +1,7 @@
 import { Box, ChakraProps, Text } from '@chakra-ui/react';
 import React from 'react';
 
-export const Th = (props) => {
+export const Th = (props: ChakraProps & { children: any }) => {
     return <Text
         as="th"
         p={4}
@@ -36,7 +36,7 @@ export const Tr = (props: ChakraProps & { children: any }) => {
         {...props}
     />
 }
-export const Table = (props) => {
+export const Table = (props: ChakraProps & { children: any }) => {
     return (
         <Box
             as="table"

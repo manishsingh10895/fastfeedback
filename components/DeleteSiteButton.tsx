@@ -8,13 +8,13 @@ import {
 import React from "react"
 import { mutate } from "swr"
 import { useAuth } from "../lib/auth"
-import { removeFeedback } from "../lib/db"
+import { deleteSite, removeFeedback } from "../lib/db"
 
 type Props = {
-    feedbackId: string
+    siteId: string
 }
 
-export default function RemoveButton(props: Props) {
+export default function DeleteSiteButton(props: Props) {
     const [isOpen, setIsOpen] = React.useState(false)
     const onClose = () => setIsOpen(false)
     const cancelRef = React.useRef()
@@ -25,20 +25,20 @@ export default function RemoveButton(props: Props) {
 
     async function onDelete() {
         try {
-            await removeFeedback(props.feedbackId);
+            await deleteSite(props.siteId);
             onClose();
             toast({
-                title: "Feedback removed",
-                description: "The feedback has been removed from the database.",
+                title: "Site removed",
+                description: "The site has been removed from the database.",
                 status: "success",
                 duration: 9000,
                 isClosable: true,
             });
 
-            mutate(['/api/feedback', auth.user.token],
+            mutate(['/api/sites', auth.user.token],
                 async (staleData) => ({
-                    feedbacks: staleData.feedbacks.filter(
-                        (feedback) => feedback.id !== props.feedbackId
+                    sites: staleData.sites.filter(
+                        (site) => site.id !== props.siteId
                     ),
                 })
             );
@@ -65,18 +65,18 @@ export default function RemoveButton(props: Props) {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                            Remove Feedback
+                            Remove Site
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
-                            {"Are you sure? You can't undo this action afterwards."}
+                            {"Are you sure? This will delete all of the site's feedback"}
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={onClose}>
                                 Cancel
                             </Button>
-                            <Button colorScheme="red" onClick={onDelete} ml={3}>
+                            <Button fontWeight="bold" colorScheme="red" onClick={onDelete} ml={3}>
                                 Delete
                             </Button>
                         </AlertDialogFooter>

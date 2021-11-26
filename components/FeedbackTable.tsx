@@ -1,7 +1,7 @@
-import { DeleteIcon } from '@chakra-ui/icons';
-import { Code, IconButton, Switch } from '@chakra-ui/react';
-import React from 'react';
-import RemoveButton from './RemoveButton';
+import { Code, Switch } from '@chakra-ui/react';
+import React, { ChangeEvent } from 'react';
+import FeedbackRow from './FeedbackRow';
+import DeleteFeedbackButton from './DeleteFeedbackButton';
 import { Table, Td, Th, Tr } from './Table';
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 
 
 export default function FeedbackTable(props: Props) {
+
     return (
         <Table>
             <thead>
@@ -24,25 +25,7 @@ export default function FeedbackTable(props: Props) {
             <tbody>
                 {
                     props.feedbacks.map((s, i) => {
-                        return <Tr key={s.id}>
-                            <Td fontWeight="medium">
-                                {s.author}
-                            </Td>
-                            <Td>
-                                {s.text}
-                            </Td>
-                            <Td>
-                                <Code>
-                                    {'/'}
-                                </Code>
-                            </Td>
-                            <Td>
-                                <Switch colorScheme="green" defaultChecked={s.status == 'active'} checked={s.status == 'active'} />
-                            </Td>
-                            <Td>
-                                <RemoveButton feedbackId={s.id} />
-                            </Td>
-                        </Tr>
+                        return <FeedbackRow feedback={s} key={i} />
                     })
                 }
             </tbody>

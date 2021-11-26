@@ -10,6 +10,7 @@ import { useAuth } from '@/lib/auth';
 import FeedbackTable from '../components/FeedbackTable';
 import EmptyState from '../components/EmptyState';
 import FeedbackTableHeader from '../components/FeedbackTableHeader';
+import Page from '@/components/Page';
 
 export default function Dashboard() {
     const { user } = useAuth();
@@ -18,20 +19,20 @@ export default function Dashboard() {
         fetcher: fetcher
     });
 
-    console.log(data);
-
     return (
-        <DashboardShell>
-            <FeedbackTableHeader />
-            {
-                data ? <>
-                    {
-                        data.feedbacks.length ?
-                            <FeedbackTable feedbacks={data.feedbacks} ></FeedbackTable>
-                            : <EmptyState />
-                    }
-                </> : <SiteTableSkeleton />
-            }
-        </DashboardShell>
+        <Page name="Feedbacks">
+            <DashboardShell>
+                <FeedbackTableHeader siteName="" />
+                {
+                    data ? <>
+                        {
+                            data.feedbacks?.length ?
+                                <FeedbackTable feedbacks={data.feedbacks} ></FeedbackTable>
+                                : <EmptyState />
+                        }
+                    </> : <SiteTableSkeleton />
+                }
+            </DashboardShell>
+        </Page>
     )
 }

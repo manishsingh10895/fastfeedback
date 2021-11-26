@@ -9,15 +9,17 @@ import { FaArrowRight, FaGithub, FaGoogle } from 'react-icons/fa';
 import ActionButton from '../components/ActionButton';
 import { getAllFeedBack } from '../lib/db-admin';
 import Feedback from '../components/Feedback';
+import Logo from '../components/Logo';
+import LoginButtons from '@/components/LoginButtons';
 
 const SITE_ID = "6qjdlW5cMPepYqUez1zQ";
 
 export async function getStaticProps() {
-  const { feedback, error } = await getAllFeedBack(SITE_ID);
+  const { feedbacks, error } = await getAllFeedBack(SITE_ID);
   return {
     revalidate: 1,
     props: {
-      feedbacks: feedback ? feedback : [],
+      feedbacks: feedbacks ? feedbacks : [],
     }, // will be passed to the page component as props
   }
 }
@@ -33,19 +35,20 @@ export default function Home({ feedbacks }) {
         <script dangerouslySetInnerHTML={{
           __html: `
           if (document.cookie && document.cookie.includes('fast-feedback-auth')) {
-            window.location.href = "/dashboard"
+            window.location.href = "/sites"
           }
         ` }} />
       </Head>
 
       <main className={styles.main}>
+        <Logo />
         <Heading fontWeight={700}>Fast Feedback</Heading>
         {
           auth.user ?
             <>
               <Flex direction="column" p={"1rem 0"}>
                 <Button mb={10}>
-                  <Link href="/dashboard">
+                  <Link href="/sites">
                     View Dashboard
                   </Link>
                 </Button>
@@ -58,24 +61,7 @@ export default function Home({ feedbacks }) {
             </>
             :
             <>
-              <Flex margin="1rem" flexWrap="wrap" justifyContent="center ">
-                <ActionButton mr={5}
-                  leftIcon={<FaGithub />}
-
-                  onClick={() => {
-                    auth.signinWithGithub();
-                  }}>
-                  Sign In With Github
-                </ActionButton>
-                <ActionButton
-                  backgroundColor="white"
-                  color="gray.500"
-                  leftIcon={<FaGoogle />} onClick={() => {
-                    auth.signinWithGoogle();
-                  }}>
-                  Sign In With Google
-                </ActionButton>
-              </Flex>
+              <LoginButtons />
 
               <Box padding="0 1rem" w={"100%"} maxWidth="700px" marginLeft="auto" marginRight="auto" mt={10}>
                 <Flex justifyContent="space-between">
